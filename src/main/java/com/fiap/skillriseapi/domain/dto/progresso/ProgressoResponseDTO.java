@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -17,7 +16,7 @@ public class ProgressoResponseDTO {
     private Long inscricaoId;
     private Long moduloId;
     private String moduloTitle;
-    private BigDecimal percentage;
+    private Double percentage;
     private LocalDate lastUpdated;
     private LocalDate completedAt;
 }

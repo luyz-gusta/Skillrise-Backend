@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -31,8 +30,8 @@ public class Progresso {
     @JoinColumn(name = "MODULO_ID", nullable = false)
     private Modulo modulo;
 
-    @Column(name = "PERCENTAGE", precision = 5, scale = 2, nullable = false)
-    private BigDecimal percentage;
+    @Column(name = "PERCENTAGE", nullable = false, columnDefinition = "NUMBER(6,2)")
+    private Double percentage;
 
     @Column(name = "COMPLETED_AT")
     private LocalDate completedAt;
@@ -43,7 +42,7 @@ public class Progresso {
     @PrePersist
     protected void onCreate() {
         if (percentage == null) {
-            percentage = BigDecimal.ZERO;
+            percentage = 0.0;
         }
         if (lastUpdated == null) {
             lastUpdated = LocalDate.now();
@@ -53,7 +52,7 @@ public class Progresso {
     @PreUpdate
     protected void onUpdate() {
         lastUpdated = LocalDate.now();
-        if (percentage != null && percentage.compareTo(new BigDecimal("100")) >= 0 && completedAt == null) {
+        if (percentage != null && percentage >= 100.0 && completedAt == null) {
             completedAt = LocalDate.now();
         }
     }

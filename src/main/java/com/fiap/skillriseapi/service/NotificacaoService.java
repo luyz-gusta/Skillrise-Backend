@@ -57,7 +57,8 @@ public class NotificacaoService {
 
     public List<NotificacaoResponseDTO> listarPorUsuario(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException("Usuário não encontrado");
+            log.warn("Tentativa de listar notificações para usuário inexistente: {}", userId);
+            return List.of(); // Retorna lista vazia ao invés de erro
         }
 
         return notificacaoRepository.findByUser_UserIdOrderByCriadoEmDesc(userId)
@@ -68,7 +69,8 @@ public class NotificacaoService {
 
     public List<NotificacaoResponseDTO> listarNaoLidas(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException("Usuário não encontrado");
+            log.warn("Tentativa de listar notificações não lidas para usuário inexistente: {}", userId);
+            return List.of(); // Retorna lista vazia ao invés de erro
         }
 
         return notificacaoRepository.findByUser_UserIdAndLidaOrderByCriadoEmDesc(userId, false)
@@ -79,7 +81,8 @@ public class NotificacaoService {
 
     public Long contarNaoLidas(Long userId) {
         if (!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException("Usuário não encontrado");
+            log.warn("Tentativa de contar notificações não lidas para usuário inexistente: {}", userId);
+            return 0L; // Retorna 0 ao invés de erro
         }
 
         return notificacaoRepository.countByUser_UserIdAndLida(userId, false);

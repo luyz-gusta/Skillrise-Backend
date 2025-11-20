@@ -9,7 +9,6 @@ import com.fiap.skillriseapi.service.ProgressoService;
 import com.fiap.skillriseapi.specs.ProgressoControllerSpecs;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.util.InternalException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,17 +28,15 @@ public class ProgressoController implements ProgressoControllerSpecs {
         try {
             ProgressoResponseDTO progresso = progressoService.updateProgress(inscricaoId, moduloId, request);
             return ResponseEntity.ok(ApiResponseBuilder.singleUpdate(progresso));
-        } catch (Exception exp) {
-            throw new InternalException(exp);
+        } catch (Exception e) {
+            // Log detalhado do erro
+            e.printStackTrace();
+            throw e;
         }
     }
 
     @GetMapping("/inscricao/{inscricaoId}")
     public ResponseEntity<ApiListResponse<ProgressoResponseDTO>> findByInscricaoId(@PathVariable Long inscricaoId) {
-        try {
-            return ResponseEntity.ok(ApiResponseBuilder.listSuccess(progressoService.findByInscricaoId(inscricaoId)));
-        } catch (Exception exp) {
-            throw new InternalException(exp);
-        }
+        return ResponseEntity.ok(ApiResponseBuilder.listSuccess(progressoService.findByInscricaoId(inscricaoId)));
     }
 }

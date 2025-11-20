@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,5 +17,5 @@ public class ProgressoUpdateDTO {
     @NotNull(message = "Porcentagem é obrigatória")
     @DecimalMin(value = "0.0", message = "Porcentagem deve ser no mínimo 0")
     @DecimalMax(value = "100.0", message = "Porcentagem deve ser no máximo 100")
-    private BigDecimal percentage;
+    private Double percentage;
 }

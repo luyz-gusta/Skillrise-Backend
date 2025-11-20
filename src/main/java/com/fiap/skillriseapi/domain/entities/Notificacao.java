@@ -41,7 +41,7 @@ public class Notificacao {
     @Column(name = "LINK", length = 500)
     private String link;
 
-    @Column(name = "LIDA", nullable = false, columnDefinition = "NUMBER(1)")
+    @Column(name = "LIDA", nullable = false)
     private Boolean lida;
 
     @Column(name = "CRIADO_EM", nullable = false)

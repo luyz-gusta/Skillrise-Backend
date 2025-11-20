@@ -78,7 +78,7 @@ public class InscricaoService {
         
         Long modulosCompletos = progressoRepository.findByInscricao_InscricaoId(inscricaoId)
                 .stream()
-                .filter(p -> p.getPercentage().compareTo(new java.math.BigDecimal("100")) == 0)
+                .filter(p -> p.getPercentage() >= 100.0)
                 .count();
 
         if (modulosCompletos.equals(totalModulos) && totalModulos > 0) {

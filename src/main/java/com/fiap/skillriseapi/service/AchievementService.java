@@ -58,7 +58,7 @@ public class AchievementService {
 
         List<Achievement> novasConquistas = new ArrayList<>();
 
-        long modulosCompletos = progressoRepository.countByInscricao_User_UserIdAndPercentage(userId, new java.math.BigDecimal("100"));
+        long modulosCompletos = progressoRepository.countByInscricao_User_UserIdAndPercentage(userId, 100.0);
 
         long trilhasCompletas = inscricaoRepository.countByUser_UserIdAndDataConclusaoIsNotNull(userId);
 

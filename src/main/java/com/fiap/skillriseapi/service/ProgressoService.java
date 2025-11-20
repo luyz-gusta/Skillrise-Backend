@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,27 +34,49 @@ public class ProgressoService {
 
     @Transactional
     public ProgressoResponseDTO updateProgress(Long inscricaoId, Long moduloId, ProgressoUpdateDTO request) {
+        log.info("Atualizando progresso - inscricaoId: {}, moduloId: {}, percentage: {}", 
+                inscricaoId, moduloId, request.getPercentage());
+        
         Inscricao inscricao = inscricaoRepository.findById(inscricaoId)
-                .orElseThrow(() -> new ResourceNotFoundException("Inscrição não encontrada"));
+                .orElseThrow(() -> {
+                    log.error("Inscrição não encontrada: {}", inscricaoId);
+                    return new ResourceNotFoundException("Inscrição não encontrada com ID: " + inscricaoId);
+                });
 
         Modulo modulo = moduloRepository.findById(moduloId)
-                .orElseThrow(() -> new ResourceNotFoundException("Módulo não encontrado"));
+                .orElseThrow(() -> {
+                    log.error("Módulo não encontrado: {}", moduloId);
+                    return new ResourceNotFoundException("Módulo não encontrado com ID: " + moduloId);
+                });
 
         Progresso progresso = progressoRepository
                 .findByInscricao_InscricaoIdAndModulo_ModuloId(inscricaoId, moduloId)
-                .orElse(Progresso.builder()
-                        .inscricao(inscricao)
-                        .modulo(modulo)
-                        .build());
+                .orElseGet(() -> {
+                    log.info("Criando novo progresso para inscricaoId: {} e moduloId: {}", inscricaoId, moduloId);
+                    return Progresso.builder()
+                            .inscricao(inscricao)
+                            .modulo(modulo)
+                            .percentage(0.0)
+                            .lastUpdated(LocalDate.now())
+                            .build();
+                });
 
-        BigDecimal percentageAnterior = progresso.getPercentage() != null ? progresso.getPercentage() : BigDecimal.ZERO;
-        progresso.setPercentage(request.getPercentage());
+        Double percentageAnterior = progresso.getPercentage() != null ? progresso.getPercentage() : 0.0;
+        Double novaPercentage = request.getPercentage() != null ? request.getPercentage() : 0.0;
+        
+        progresso.setPercentage(novaPercentage);
         progresso.setLastUpdated(LocalDate.now());
 
-        progresso = progressoRepository.save(progresso);
+        try {
+            progresso = progressoRepository.save(progresso);
+            log.info("Progresso salvo com sucesso: progressoId={}, percentage={}", 
+                    progresso.getProgressoId(), progresso.getPercentage());
+        } catch (Exception e) {
+            log.error("Erro ao salvar progresso: {}", e.getMessage(), e);
+            throw e;
+        }
 
-        if (percentageAnterior.compareTo(BigDecimal.valueOf(100)) < 0
-                && request.getPercentage().compareTo(BigDecimal.valueOf(100)) == 0) {
+        if (percentageAnterior < 100.0 && request.getPercentage() >= 100.0) {
             
             User user = inscricao.getUser();
             

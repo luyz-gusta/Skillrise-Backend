@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface ProgressoRepository extends JpaRepository<Progresso, Long> {
     List<Progresso> findByInscricao_InscricaoId(Long inscricaoId);
     Optional<Progresso> findByInscricao_InscricaoIdAndModulo_ModuloId(Long inscricaoId, Long moduloId);
-    Long countByInscricao_User_UserIdAndPercentage(Long userId, java.math.BigDecimal percentage);
+    Long countByInscricao_User_UserIdAndPercentage(Long userId, Double percentage);
 }

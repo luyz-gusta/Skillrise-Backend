@@ -1,4 +1,4 @@
-package com.fiap.skillriseapi.rest.controller;
+package com.fiap.skillriseapi.controllers;
 
 import com.fiap.skillriseapi.domain.entities.Oportunidade;
 import com.fiap.skillriseapi.service.OportunidadeService;

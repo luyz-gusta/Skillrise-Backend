@@ -68,7 +68,7 @@ public class UserService {
 
         Long totalInscricoes = inscricaoRepository.countByUser_UserId(userId);
         Long trilhasCompletas = inscricaoRepository.countByUser_UserIdAndDataConclusaoIsNotNull(userId);
-        Long modulosCompletos = progressoRepository.countByInscricao_User_UserIdAndPercentage(userId, new java.math.BigDecimal("100"));
+        Long modulosCompletos = progressoRepository.countByInscricao_User_UserIdAndPercentage(userId, 100.0);
         Long totalCertificados = certificadoRepository.countByUser_UserId(userId);
         Long totalAchievements = achievementRepository.countByUser_UserId(userId);
 
