@@ -21,7 +21,7 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        var apiInfo = new Info().title("DASA API").version("1.0");
+        var apiInfo = new Info().title("SkillRise API").version("1.0");
 
         var swaggerVariables = new ServerVariables()
                 .addServerVariable("version", new ServerVariable()

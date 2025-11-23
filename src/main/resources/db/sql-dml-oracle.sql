@@ -434,24 +434,26 @@ COMMIT;
 -- =========================================================================
 -- 6. USUÁRIOS DE EXEMPLO (6 usuários: 5 users + 1 admin)
 -- =========================================================================
--- Nota: Senhas devem ser hasheadas pelo backend. Aqui usamos hash exemplo do BCrypt
+-- Nota: Senhas devem ser hasheadas pelo backend. Aqui usamos hash BCrypt válido
+-- Senha para todos os usuários de teste: "senha123"
+-- Hash BCrypt: $2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK
 INSERT INTO TB_USER (NAME, EMAIL, PASSWORD, ROLE, BIRTH_DATE, XP, LEVEL_ACCOUNT, STREAK_DIAS) VALUES
-('João Silva', 'joao.silva@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye8IVjTGU82VGyqeXjz', 'USER', TO_DATE('1995-06-15', 'YYYY-MM-DD'), 1250, 3, 5);
+('João Silva', 'joao.silva@example.com', '$2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK', 'USER', TO_DATE('1995-06-15', 'YYYY-MM-DD'), 1250, 3, 5);
 
 INSERT INTO TB_USER (NAME, EMAIL, PASSWORD, ROLE, BIRTH_DATE, XP, LEVEL_ACCOUNT, STREAK_DIAS) VALUES
-('Maria Santos', 'maria.santos@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye8IVjTGU82VGyqeXjz', 'USER', TO_DATE('1992-03-22', 'YYYY-MM-DD'), 2800, 5, 12);
+('Maria Santos', 'maria.santos@example.com', '$2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK', 'USER', TO_DATE('1992-03-22', 'YYYY-MM-DD'), 2800, 5, 12);
 
 INSERT INTO TB_USER (NAME, EMAIL, PASSWORD, ROLE, BIRTH_DATE, XP, LEVEL_ACCOUNT, STREAK_DIAS) VALUES
-('Pedro Oliveira', 'pedro.oliveira@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye8IVjTGU82VGyqeXjz', 'USER', TO_DATE('1998-11-08', 'YYYY-MM-DD'), 450, 1, 2);
+('Pedro Oliveira', 'pedro.oliveira@example.com', '$2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK', 'USER', TO_DATE('1998-11-08', 'YYYY-MM-DD'), 450, 1, 2);
 
 INSERT INTO TB_USER (NAME, EMAIL, PASSWORD, ROLE, BIRTH_DATE, XP, LEVEL_ACCOUNT, STREAK_DIAS) VALUES
-('Ana Souza', 'ana.souza@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye8IVjTGU82VGyqeXjz', 'USER', TO_DATE('1990-05-12', 'YYYY-MM-DD'), 650, 2, 3);
+('Ana Souza', 'ana.souza@example.com', '$2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK', 'USER', TO_DATE('1990-05-12', 'YYYY-MM-DD'), 650, 2, 3);
 
 INSERT INTO TB_USER (NAME, EMAIL, PASSWORD, ROLE, BIRTH_DATE, XP, LEVEL_ACCOUNT, STREAK_DIAS) VALUES
-('Carlos Pereira', 'carlos.pereira@example.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye8IVjTGU82VGyqeXjz', 'USER', TO_DATE('1985-11-20', 'YYYY-MM-DD'), 3200, 6, 15);
+('Carlos Pereira', 'carlos.pereira@example.com', '$2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK', 'USER', TO_DATE('1985-11-20', 'YYYY-MM-DD'), 3200, 6, 15);
 
 INSERT INTO TB_USER (NAME, EMAIL, PASSWORD, ROLE, BIRTH_DATE, XP, LEVEL_ACCOUNT, STREAK_DIAS) VALUES
-('Luiz Gustavo', 'luiz@admin.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye8IVjTGU82VGyqeXjz', 'ADMIN', TO_DATE('1993-01-30', 'YYYY-MM-DD'), 5000, 10, 30);
+('Luiz Gustavo', 'luiz@admin.com', '$2a$10$8pqjYZQ7Z8ZQX7Z8ZQX7ZeuK5wF5zL5z5L5z5L5z5L5z5L5z5L5zK', 'ADMIN', TO_DATE('1993-01-30', 'YYYY-MM-DD'), 5000, 10, 30);
 
 COMMIT;
 

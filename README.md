@@ -9,6 +9,25 @@
 
 ---
 
+## 🎯 Problema e Solução
+
+### O Problema
+O mercado de trabalho está em transformação acelerada com:
+- **85 milhões de empregos** serão substituídos por automação até 2030 (WEF)
+- **97 milhões de novas vagas** exigirão habilidades diferentes
+- **50% dos trabalhadores** precisarão de reskilling/upskilling
+- Falta de plataformas integradas que conectem aprendizado → certificação → emprego
+
+### Nossa Solução
+**SkillRise 2030+** oferece uma jornada completa:
+1. **Diagnóstico** - Identifica lacunas de habilidades do profissional
+2. **Trilhas Personalizadas** - 15 trilhas estruturadas em IA, Cloud, Cybersecurity, ESG, Soft Skills
+3. **Gamificação** - Sistema de XP, níveis, conquistas e streaks para manter engajamento
+4. **Certificação Digital** - Certificados verificáveis ao concluir trilhas
+5. **Matching com Vagas** - 20 oportunidades reais vinculadas às competências desenvolvidas
+
+---
+
 ## 📋 Sobre
 
 Backend da plataforma **SkillRise 2030+** - solução educacional para preparar profissionais para o futuro do trabalho através de:
@@ -45,9 +64,9 @@ Backend da plataforma **SkillRise 2030+** - solução educacional para preparar 
 
 ### Segurança
 - **BCrypt** para hash de senhas
-- **JWT** para autenticação stateless
+- **JWT temporariamente desabilitado** para facilitar testes
 - **CORS** configurado para frontend
-- **Role-based access control** (USER, ADMIN)
+- **Autenticação simplificada** para desenvolvimento
 
 ---
 
@@ -123,10 +142,6 @@ spring.jpa.hibernate.ddl-auto=validate
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 
-# JWT
-jwt.secret=seu-secret-super-seguro-com-256-bits-no-minimo
-jwt.expiration=86400000
-
 # Server
 server.port=8080
 ```
@@ -153,10 +168,8 @@ mvn spring-boot:run
 # Health check
 curl http://localhost:8080/actuator/health
 
-# Testar login
-curl -X POST http://localhost:8080/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"maria.silva@email.com","password":"senha123"}'
+# Testar listagem de trilhas (sem autenticação)
+curl http://localhost:8080/trilhas
 ```
 
 ✅ **API rodando em:** `http://localhost:8080`
@@ -178,6 +191,234 @@ ana.costa@email.com / senha123 (Level 1, 100 XP, 1 achievement)
 - **50+ Módulos** organizados nas trilhas
 - **10 Empresas** parceiras
 - **20 Vagas** reais vinculadas às trilhas
+
+---
+
+## 🧪 Como Testar
+
+### Opção 1: Swagger UI (Recomendado)
+
+Acesse a interface interativa: **http://localhost:8080/swagger-ui.html**
+
+⚠️ **Nota**: Autenticação JWT está temporariamente desabilitada para facilitar testes.
+
+1. **Acesse a interface** do Swagger
+2. **Teste endpoints** diretamente sem necessidade de token
+3. **Todos os endpoints** estão acessíveis publicamente
+
+### Opção 2: Postman
+
+#### 1️⃣ Importar Collection
+
+Crie uma nova Collection e adicione:
+
+**POST** `/auth/login` - Autenticação
+```json
+{
+  "email": "maria.silva@email.com",
+  "password": "senha123"
+}
+```
+
+**GET** `/trilhas` - Listar todas as trilhas
+```
+Sem headers necessários
+```
+
+**POST** `/inscricoes` - Inscrever em trilha
+```json
+{
+  "trilhaId": 1
+}
+```
+```
+Sem headers necessários
+```
+
+**PUT** `/progresso?inscricaoId=1&moduloId=1` - Atualizar progresso
+```json
+{
+  "percentage": 100.0
+}
+```
+```
+Sem headers necessários
+```
+
+**GET** `/user/stats` - Estatísticas do usuário
+```
+Sem headers necessários
+```
+
+#### 2️⃣ Configurar Ambiente
+
+Crie variável `baseUrl` = `http://localhost:8080`
+Crie variável `token` e atualize após login
+
+### Opção 3: Insomnia
+
+Importe o seguinte JSON:
+
+```json
+{
+  "name": "SkillRise API",
+  "requests": [
+    {
+      "name": "Listar Trilhas",
+      "method": "GET",
+      "url": "{{ baseUrl }}/trilhas"
+    },
+    {
+      "name": "Inscrever em Trilha",
+      "method": "POST",
+      "url": "{{ baseUrl }}/inscricoes",
+      "body": {
+        "trilhaId": 1
+      }
+    }
+  ]
+}
+```
+
+### Exemplos de Requisições
+
+#### 📝 Registro de Novo Usuário
+```bash
+curl -X POST http://localhost:8080/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "João Silva",
+    "email": "joao@email.com",
+    "password": "senha123"
+  }'
+```
+
+**Resposta:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "userId": 4,
+  "name": "João Silva",
+  "email": "joao@email.com"
+}
+```
+
+#### 🔐 Login
+```bash
+curl -X POST http://localhost:8080/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "maria.silva@email.com",
+    "password": "senha123"
+  }'
+```
+
+**Resposta:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "userId": 1,
+  "name": "Maria Silva",
+  "email": "maria.silva@email.com"
+}
+```
+
+#### 📚 Listar Trilhas
+```bash
+curl -X GET http://localhost:8080/trilhas
+```
+
+**Resposta:**
+```json
+{
+  "data": [
+    {
+      "trilhaId": 1,
+      "title": "Inteligência Artificial e Machine Learning",
+      "description": "Domine IA desde fundamentos até aplicações avançadas",
+      "category": "TECHNOLOGY",
+      "level": "INTERMEDIARIO",
+      "durationHours": 120.00,
+      "rating": 4.80,
+      "totalAvaliacoes": 234,
+      "imageUrl": "https://images.unsplash.com/photo-...",
+      "totalModulos": 8
+    }
+  ],
+  "count": 15
+}
+```
+
+#### ✅ Inscrever em Trilha
+```bash
+curl -X POST http://localhost:8080/inscricoes \
+  -H "Content-Type: application/json" \
+  -d '{"trilhaId": 1}'
+```
+
+**Resposta:**
+```json
+{
+  "data": {
+    "inscricaoId": 5,
+    "trilhaId": 1,
+    "trilhaTitle": "Inteligência Artificial e Machine Learning",
+    "dataInscricao": "2025-11-20",
+    "dataConclusao": null,
+    "concluida": false,
+    "progressoGeral": 0.0
+  }
+}
+```
+
+#### 📈 Atualizar Progresso de Módulo
+```bash
+curl -X PUT 'http://localhost:8080/progresso?inscricaoId=1&moduloId=1' \
+  -H "Content-Type: application/json" \
+  -d '{"percentage": 100.0}'
+```
+
+**Resposta:**
+```json
+{
+  "data": {
+    "progressoId": 10,
+    "inscricaoId": 1,
+    "moduloId": 1,
+    "moduloTitle": "Introdução à IA",
+    "percentage": 100.0,
+    "lastUpdated": "2025-11-20",
+    "completedAt": "2025-11-20"
+  }
+}
+```
+
+#### 🏆 Obter Estatísticas do Usuário
+```bash
+curl -X GET http://localhost:8080/user/stats
+```
+
+**Resposta:**
+```json
+{
+  "data": {
+    "userId": 1,
+    "name": "Maria Silva",
+    "email": "maria.silva@email.com",
+    "xp": 2000,
+    "level": 5,
+    "xpProximoLevel": 500,
+    "streakDias": 7,
+    "ultimoAcesso": "2025-11-20",
+    "totalInscricoes": 5,
+    "trilhasCompletas": 2,
+    "modulosCompletos": 15,
+    "totalCertificados": 2,
+    "totalAchievements": 8,
+    "taxaConclusao": 40.0
+  }
+}
+```
 
 ---
 
